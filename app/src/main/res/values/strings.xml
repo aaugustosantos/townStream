@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">townStream</string>
+    <string name="facebook_app_id">448050218677119</string>
+    <string name="hello_world">Hello world fragmented!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login_fragment">LoginFragment</string>
+</resources>
