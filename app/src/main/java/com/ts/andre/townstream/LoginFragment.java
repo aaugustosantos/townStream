@@ -12,10 +12,15 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginFragment extends android.support.v4.app.Fragment {
     CallbackManager callbackManager;
@@ -58,12 +63,12 @@ public class LoginFragment extends android.support.v4.app.Fragment {
         userProfile = Profile.getCurrentProfile();
 
         if(accessToken!=null){
-            sendUserInfo(userProfile);
+            sendUserInfo();
         }
 
 
         LoginButton loginButton = (LoginButton)view.findViewById(R.id.login_button);
-        loginButton.setReadPermissions("user_friends");
+        loginButton.setReadPermissions("user_friends,email,user_birthday");
 
 
         loginButton.setFragment(this);
@@ -73,7 +78,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
             public void onSuccess(LoginResult loginResult) {
 
 
-                sendUserInfo(userProfile);
+                sendUserInfo();
 
                 }
 
@@ -107,10 +112,31 @@ public class LoginFragment extends android.support.v4.app.Fragment {
         profileTracker.stopTracking();
     }
 
-    public void sendUserInfo(Profile profile){
-        Intent intent = new Intent(getActivity(), UserInfo.class);
-        String name = profile.getName();
-        intent.putExtra(EXTRA_NAME, name);
-        startActivity(intent);
+    public void sendUserInfo(){
+        final Intent intent = new Intent(getActivity(), UserInfo.class);
+
+
+        GraphRequest request = GraphRequest.newMeRequest(
+                accessToken,
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
+                        try {
+                            intent.putExtra(EXTRA_NAME, jsonObject.getString("birthday"));
+                            startActivity(intent);
+                        }
+                        catch (JSONException e) {
+
+                        }
+
+                    }
+                });
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields","id,name,birthday");
+        request.setParameters(parameters);
+        request.executeAsync();
+
+
     }
 }
