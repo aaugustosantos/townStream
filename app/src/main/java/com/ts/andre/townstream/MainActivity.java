@@ -1,5 +1,6 @@
 package com.ts.andre.townstream;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.v4.app.FragmentActivity;
@@ -22,7 +23,9 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_main);
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+       // setContentView(R.layout.activity_main);
     }
 
     @Override

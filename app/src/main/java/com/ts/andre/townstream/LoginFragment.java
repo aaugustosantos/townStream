@@ -123,7 +123,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
                     public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
                         try {
                             intent.putExtra(EXTRA_NAME, jsonObject.getString("birthday"));
-                            startActivity(intent);
+                            //startActivity(intent);
                         }
                         catch (JSONException e) {
 
